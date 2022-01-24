@@ -9,13 +9,10 @@ int is_final(Etat_Automate_Syntax etat){return etat == E_ENTIER;}
 
 int analyser(Etat_Automate_Syntax etat, Nature_Lexeme lex){
 
-    while (etat != E_ERREUR)
-    {
-        switch (etat)
-        {
+    while (etat != E_ERREUR){
+        switch (etat){
             case E_INIT:
-                switch (lex)
-                {
+                switch (lex){
                     case ENTIER:
                         etat = E_ENTIER;
                         break;
