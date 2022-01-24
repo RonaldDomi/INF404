@@ -3,6 +3,9 @@
 -- analyse syntaxique d'une expression
 --------------------------------*/
 
+#include "analyse_lexicale.h"
+
+
 typedef enum {E_INIT, E_ENTIER, E_SYMBOLE, E_ERREUR} Etat_Automate_Syntax;
 
 int analyser(Etat_Automate_Syntax etat, Nature_Lexeme lex);
