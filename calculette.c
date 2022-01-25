@@ -25,7 +25,7 @@ int main (int argc, char *argv[]) {
    } ;
    Etat_Automate_Syntax etat = E_INIT;
    while (! fin_de_sequence()) { 
-        etat = analyser(etat, lexeme_courant().nature); 
+        etat = analyser(etat); 
         avancer();
    } ;
    is_final(etat) ? printf("\nlexpression est correct\n") : printf("\nlexpression nest pas correct\n");

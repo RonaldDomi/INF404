@@ -6,14 +6,14 @@
 int is_final(Etat_Automate_Syntax etat){return etat == E_ENTIER;}
 
 
-int analyser(Etat_Automate_Syntax etat, Nature_Lexeme lex){
+Etat_Automate_Syntax analyser(Etat_Automate_Syntax etat){
 
     while (etat != E_ERREUR)
     {
         switch (etat)
         {
             case E_INIT:
-                switch (lex)
+                switch (lexeme_courant().nature)
                 {
                     case ENTIER:
                         return E_ENTIER;
@@ -25,7 +25,7 @@ int analyser(Etat_Automate_Syntax etat, Nature_Lexeme lex){
                 }
                 break;
             case E_ENTIER:
-                switch (lex)
+                switch (lexeme_courant().nature)
                 {
                     case PLUS :
                     case MOINS :
@@ -41,7 +41,7 @@ int analyser(Etat_Automate_Syntax etat, Nature_Lexeme lex){
                 break;
             
             case E_SYMBOLE:
-                switch (lex)
+                switch (lexeme_courant().nature)
                 {
                     case ENTIER:
                         return E_ENTIER;

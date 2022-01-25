@@ -8,7 +8,7 @@
 
 typedef enum {E_INIT, E_ENTIER, E_SYMBOLE, E_ERREUR} Etat_Automate_Syntax;
 
-int analyser(Etat_Automate_Syntax etat, Nature_Lexeme lex);
+Etat_Automate_Syntax analyser(Etat_Automate_Syntax etat);
 
 int is_final(Etat_Automate_Syntax etat);
 
