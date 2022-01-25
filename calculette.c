@@ -6,7 +6,6 @@
 #include <stdlib.h>
 
 #include "analyse_syntaxique.h"
-//#include "analyse_lexicale.h"
 
 
 int main (int argc, char *argv[]) {
@@ -24,11 +23,13 @@ int main (int argc, char *argv[]) {
                 exit(1) ;
    } ;
    Etat_Automate_Syntax etat = E_INIT;
+   int res = 0;
+   Nature_Lexeme last_lex ;
    while (! fin_de_sequence()) { 
-        etat = analyser(etat); 
+        etat = analyser(etat, &last_lex, &res); 
         avancer();
    } ;
-   is_final(etat) ? printf("\nlexpression est correct\n") : printf("\nlexpression nest pas correct\n");
+   is_final(etat) ? printf("\nlexpression est correct et le resultat est %d\n", res) : printf("\nlexpression nest pas correct\n");
    arreter() ; // termine l'analyse lexicale
    return 0 ;
 }

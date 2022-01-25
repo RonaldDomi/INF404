@@ -6,7 +6,7 @@
 int is_final(Etat_Automate_Syntax etat){return etat == E_ENTIER;}
 
 
-Etat_Automate_Syntax analyser(Etat_Automate_Syntax etat){
+Etat_Automate_Syntax analyser(Etat_Automate_Syntax etat, Nature_Lexeme *last_lex, int *res){
 
     while (etat != E_ERREUR)
     {
@@ -16,6 +16,7 @@ Etat_Automate_Syntax analyser(Etat_Automate_Syntax etat){
                 switch (lexeme_courant().nature)
                 {
                     case ENTIER:
+                        *res = *res + lexeme_courant().valeur;
                         return E_ENTIER;
                         break;
                     
@@ -28,9 +29,19 @@ Etat_Automate_Syntax analyser(Etat_Automate_Syntax etat){
                 switch (lexeme_courant().nature)
                 {
                     case PLUS :
+                        *last_lex = PLUS;
+                        return E_SYMBOLE;
+                        break;
                     case MOINS :
+                        *last_lex = MOINS;
+                        return E_SYMBOLE;
+                        break;
                     case MUL :
-                    case DIV : //operateur
+                        *last_lex = MUL;
+                        return E_SYMBOLE;
+                        break;
+                    case DIV :
+                        *last_lex = DIV;
                         return E_SYMBOLE;
                         break;
                     
@@ -44,6 +55,23 @@ Etat_Automate_Syntax analyser(Etat_Automate_Syntax etat){
                 switch (lexeme_courant().nature)
                 {
                     case ENTIER:
+                        switch (*last_lex)
+                        {
+                        case PLUS:
+                            *res = *res + lexeme_courant().valeur;
+                            break;
+                        case MOINS:
+                            *res = *res - lexeme_courant().valeur;
+                            break;
+                        case MUL:
+                            *res = *res * lexeme_courant().valeur;
+                            break;
+                        case DIV:
+                            *res = *res / lexeme_courant().valeur;
+                            break;
+                        default:
+                            break;
+                        }
                         return E_ENTIER;
                         break;
                     
