@@ -77,7 +77,7 @@
    //		soit un separateur,  soit le 1er caractere d'un lexeme
 
    void reconnaitre_lexeme() {
-      typedef enum {E_INIT, E_ENTIER, E_FIN} Etat_Automate ;
+      typedef enum {E_INIT, E_ENTIER, E_FLOAT, E_FIN} Etat_Automate ;
       Etat_Automate etat=E_INIT;
 
      // on commence par lire et ignorer les separateurs
@@ -86,6 +86,8 @@
      } ;
 
      lexeme_en_cours.chaine[0] = '\0' ;
+
+      float ordre = 10.0;
 
      // on utilise ensuite un automate pour reconnaitre et construire le prochain lexeme
 
@@ -134,6 +136,10 @@
                			lexeme_en_cours.nature = DIV;
                			etat = E_FIN;
 			   			break;
+                        case '.':
+               			lexeme_en_cours.nature = FLOAT;
+               			etat = E_FIN;
+			   			break;
 		       		  default:
 						printf("Erreur_Lexicale") ;
 				 		exit(0) ;
@@ -151,16 +157,39 @@
 			switch(nature_caractere(caractere_courant())) {
 			    case CHIFFRE:
 		  			ajouter_caractere (lexeme_en_cours.chaine, caractere_courant()) ;
-                  			lexeme_en_cours.valeur = lexeme_en_cours.valeur * 10 + caractere_courant() - '0';
+                  			lexeme_en_cours.valeur = lexeme_en_cours.valeur * 10.0 + caractere_courant() - '0';
                   	etat = E_ENTIER;
                   	avancer_car ();
 					break ;
+             case SYMBOLE:
+         		switch (caractere_courant()){
+                  case '.':
+		      	    ajouter_caractere (lexeme_en_cours.chaine, caractere_courant()) ;
+                   lexeme_en_cours.nature = FLOAT;
+                   etat = E_FLOAT;
+                   avancer_car ();
+                   break;
+                  default:
+                   etat = E_FIN;
+               }
 
-				default:
+			   default:
                   	etat = E_FIN;
           	} ;
 
-	    case E_FIN:  // etat final
+      case E_FLOAT:
+         switch(nature_caractere(caractere_courant())) {
+			    case CHIFFRE:
+		  			ajouter_caractere (lexeme_en_cours.chaine, caractere_courant()) ;
+               lexeme_en_cours.valeur += (caractere_courant()-'0') / ordre;
+               ordre *= 10.0;
+               etat = E_FLOAT;
+               avancer_car ();
+               break;
+             default:
+               etat = E_FIN;
+         }
+	   case E_FIN:  // etat final
 		break ;
 	    
 	  } ; // fin du switch(etat)
@@ -211,6 +240,7 @@
 	 	case '-':  
 	 	case '*':
 	 	case '/':
+      case '.':
             return 1;
 
         default:
@@ -224,10 +254,11 @@
    char *Nature_vers_Chaine (Nature_Lexeme nature) {
 	switch (nature) {
 		case ENTIER: return "ENTIER" ;
+      case FLOAT : return "FLOAT";
 		case PLUS: return "PLUS" ;
       case MOINS: return "MOINS" ;            
       case MUL: return "MUL" ;
-      case DIV: return "DIV" ;             
+      case DIV: return "DIV" ; 
       case FIN_SEQUENCE: return "FIN_SEQUENCE" ;     
       default: return "ERREUR" ;            
 	} ;
@@ -249,7 +280,8 @@
             printf(", chaine = %s, ", l.chaine) ;
             switch(l.nature) {
                  case ENTIER:
-                      printf("valeur = %d", l.valeur);
+                 case FLOAT:
+                      printf("valeur = %f", l.valeur);
                  default:
                       break;
             } ;

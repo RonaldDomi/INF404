@@ -18,6 +18,7 @@
 
    typedef enum { 
       ENTIER,           // sequence de chiffres
+      FLOAT,            // floattant
       PLUS,             // +
       MOINS,            // -
       MUL,              // *
@@ -31,7 +32,7 @@
       unsigned int ligne;           // numero de ligne
       unsigned int colonne;         // numero de colonne
       char chaine[256];           // chaine de caracteres
-      int valeur;          // valeur d'un entier
+      float valeur;          // valeur d'un entier
    } Lexeme ; 
 
    void afficher(Lexeme l);
