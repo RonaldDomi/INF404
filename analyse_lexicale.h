@@ -16,7 +16,9 @@
       C_FIN_SEQUENCE   // caractere de fin de sequence     
    } Nature_Caractere ;
 
-   typedef enum { 
+   typedef enum {
+      PARO,             // (
+      PARF,             // )
       ENTIER,           // sequence de chiffres
       FLOAT,            // floattant
       PLUS,             // +
