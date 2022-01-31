@@ -28,16 +28,19 @@ int main (int argc, char *argv[]) {
     // analyse recursive de grammaire
     float res;
     int res_error = rec_eaep(&res);
-    
-    if(res_error == 0){
+    if(!fin_de_sequence()){
         // ERROR
         printf("Pas bon syntaxe, lexemme \n");
         afficher(lexeme_courant());
         printf("\n");
         return 0;
-    }else{
-        printf("Bon syntaxe\n");
+
+    } else if(res_error == 0){
+        // ERROR
+        printf("Pas bon syntaxe, lexemme \n");
         afficher(lexeme_courant());
+        printf("\n");
+        return 0;
     }
     
     printf("res: %f\n", res);

@@ -11,6 +11,7 @@ int rec_eaep(float* val){
         case ENTIER:
             *val = lexeme_courant().valeur;
             avancer();
+            // return 1;
             break;
         case PARO:
             avancer();
