@@ -8,6 +8,8 @@
 
 #include "analyse_syntaxique_grammaire.h"
 
+#include "ast_parcours.h"
+
 
 int main (int argc, char *argv[]) {
     switch (argc) {
@@ -26,24 +28,25 @@ int main (int argc, char *argv[]) {
    
     // float resultat;
     // analyse recursive de grammaire
-    float res;
-    int res_error = rec_eaep(&res);
-    if(!fin_de_sequence()){
+    // float res;
+    Ast A;
+    int res_error = rec_eag(&A);
+    if(res_error == 0 || !fin_de_sequence()){
         // ERROR
-        printf("Pas bon syntaxe, lexemme \n");
+        printf("Mauvaise syntaxe, lexemme \n");
         afficher(lexeme_courant());
         printf("\n");
         return 0;
 
-    } else if(res_error == 0){
-        // ERROR
-        printf("Pas bon syntaxe, lexemme \n");
-        afficher(lexeme_courant());
-        printf("\n");
-        return 0;
+    } 
+    else{
+        afficher_ast(A);
+        printf("\nBonne syntax !! \n");
+        int res = evaluation(A);
+        printf("resultat: %d\n", res);
     }
-    
-    printf("res: %f\n", res);
+
+    //printf("res: %f\n", res);
 
     arreter() ; // termine l'analyse lexicale
     return 0 ;

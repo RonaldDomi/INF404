@@ -180,14 +180,15 @@
                   default:
                    etat = E_FIN;
                }
-
+               break;
 			   default:
                   	etat = E_FIN;
           	} ;
+            break;
 
       case E_FLOAT:
          switch(nature_caractere(caractere_courant())) {
-			    case CHIFFRE:
+			    case CHIFFRE:   
 		  			ajouter_caractere (lexeme_en_cours.chaine, caractere_courant()) ;
                lexeme_en_cours.valeur += (caractere_courant()-'0') / ordre;
                ordre *= 10.0;
