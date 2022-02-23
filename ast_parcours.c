@@ -13,6 +13,9 @@ void aff_operateur(TypeOperateur op){
 		case N_MUL:
 			printf("*") ;
 			break;
+		case N_DIV:
+			printf("/") ;
+			break;
 	} 
 }
 
@@ -26,13 +29,13 @@ void afficher_ast(Ast expr) {
                         printf(")");
 			break ;
                case VALEUR:
-                  	printf("%d", expr->valeur);
+                  	printf("%f", expr->valeur);
 			break ;
 	}
 }
 
-int evaluation(Ast expr) {
-      int vg, vd;
+float evaluation(Ast expr) {
+      float vg, vd;
 	  switch (expr->nature)
 	  {
 	  case VALEUR:
@@ -48,12 +51,14 @@ int evaluation(Ast expr) {
 			return vg - vd;
 		case N_MUL:
 		 return vg * vd;
+		case N_DIV:
+		 return vg / vd;
 		default:
 			break;
 		}  
 	  default:
 		  break;
 	  }
-      return -1 ;
+      return -1.0 ;
 }
 

@@ -42,8 +42,8 @@ int main (int argc, char *argv[]) {
     else{
         afficher_ast(A);
         printf("\nBonne syntax !! \n");
-        int res = evaluation(A);
-        printf("resultat: %d\n", res);
+        float res = evaluation(A);
+        printf("resultat: %f\n", res);
     }
 
     //printf("res: %f\n", res);

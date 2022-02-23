@@ -182,6 +182,7 @@ int Rec_op2(TypeOperateur *Op){
             avancer();    
             return 1;
         case DIV:
+            *Op = N_DIV;
             avancer();    
             return 1;
         
