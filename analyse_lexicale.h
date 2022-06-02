@@ -11,9 +11,11 @@
 
    typedef enum {
 	  ERREUR_CAR,   // caractere incorrect
-	  CHIFFRE,			// chiffre 
+	  CHIFFRE,			// chiffre
+     LETTRE,			// caractere       
 	  SYMBOLE,			// symbole,
-      C_FIN_SEQUENCE   // caractere de fin de sequence     
+	  OPERATEUR,	   // operateur,
+      C_FIN_SEQUENCE // caractere de fin de sequence     
    } Nature_Caractere ;
 
    typedef enum {
@@ -25,6 +27,24 @@
       MOINS,            // -
       MUL,              // *
       DIV,              // /
+      IDF,              // identificateur
+      AFF,              // = (symbole d'affectation)
+      SEPAFF,           // \n (separateur d'affectation)
+      LIRE,             //lire
+      ECRIRE,           //ecrire
+      IF,               //if
+      FI,               // fin if
+      THEN,             //then
+      ELSE,             //else
+      INF,              //inferieur
+      INFEG,            //inferieur ou egale
+      SUP,              //superieur
+      SUPEG,            //superieur ou egale
+      EG,               //egale
+      DIFF,             //different
+      WHILE,            //tan que
+      DO,               //faire
+      DONE,             //fin tant que
       FIN_SEQUENCE,     // pseudo lexeme ajoute en fin de sequence
     } Nature_Lexeme ;
 

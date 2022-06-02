@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "analyse_syntaxique_grammaire.h"
+#include "analyse_syntaxique.h"
 
 #include "ast_parcours.h"
 
@@ -29,8 +29,12 @@ int main (int argc, char *argv[]) {
     // float resultat;
     // analyse recursive de grammaire
     // float res;
+    int taille_table = 100;
+    table_symbole t = malloc(sizeof(symbole)*taille_table);
+    init_table(t, taille_table);
+    //int res_error = Rec_seq_aff(t);
     Ast A;
-    int res_error = rec_eag(&A);
+    int res_error = Rec_pgm(&A);
     if(res_error == 0 || !fin_de_sequence()){
         // ERROR
         printf("Mauvaise syntaxe, lexemme \n");
@@ -42,8 +46,10 @@ int main (int argc, char *argv[]) {
     else{
         afficher_ast(A);
         printf("\nBonne syntax !! \n");
-        float res = evaluation(A);
-        printf("resultat: %f\n", res);
+        interpreter(A, t);
+        afficher_table(t);
+        //float res = evaluation(A);
+        //printf("resultat: %f\n", res);
     }
 
     //printf("res: %f\n", res);

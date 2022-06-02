@@ -32,6 +32,8 @@
    int est_separateur(char c ) ;
    int est_chiffre(char c ) ;
    int est_symbole(char c ) ;
+   int est_operateur(char c ) ;
+   int est_lettre(char c);
    void reconnaitre_lexeme();
 
    /* --------------------------------------------------------------------- */
@@ -77,7 +79,7 @@
    //		soit un separateur,  soit le 1er caractere d'un lexeme
 
    void reconnaitre_lexeme() {
-      typedef enum {E_INIT, E_ENTIER, E_FLOAT, E_FIN} Etat_Automate ;
+      typedef enum {E_INIT, E_ENTIER, E_FLOAT, E_IDF, E_OP, E_FIN} Etat_Automate ;
       Etat_Automate etat=E_INIT;
 
      // on commence par lire et ignorer les separateurs
@@ -120,42 +122,84 @@
                		lexeme_en_cours.colonne = numero_colonne();
 		       		ajouter_caractere (lexeme_en_cours.chaine, caractere_courant()) ;
                		switch (caractere_courant()) {
-               		  case '+':
-               			lexeme_en_cours.nature = PLUS;
-               			etat = E_FIN;
-			   			break;
-               		  case '-':
-               			lexeme_en_cours.nature = MOINS;
-               			etat = E_FIN;
-			   			break;
-               		  case '*':
-               			lexeme_en_cours.nature = MUL;
-               			etat = E_FIN;
-			   			break;
+               		   case '+':
+                           lexeme_en_cours.nature = PLUS;
+                           etat = E_FIN;
+                           break;
+               		   case '-':
+                           lexeme_en_cours.nature = MOINS;
+                           etat = E_FIN;
+                           break;
+               		   case '*':
+                           lexeme_en_cours.nature = MUL;
+                           etat = E_FIN;
+                           break;
                         case '/':
-               			lexeme_en_cours.nature = DIV;
-               			etat = E_FIN;
-			   			break;
+                           lexeme_en_cours.nature = DIV;
+                           etat = E_FIN;
+                           break;
                         case '.':
-               			lexeme_en_cours.nature = FLOAT;
-               			etat = E_FIN;
-			   			break;
+                           lexeme_en_cours.nature = FLOAT;
+                           etat = E_FIN;
+                           break;
                         case '(':
-               			lexeme_en_cours.nature = PARO;
-               			etat = E_FIN;
-			   			break;
+                           lexeme_en_cours.nature = PARO;
+                           etat = E_FIN;
+                           break;
                         case ')':
-               			lexeme_en_cours.nature = PARF;
-               			etat = E_FIN;
-			   			break;
-		       		  default:
-						printf("Erreur_Lexicale") ;
-				 		exit(0) ;
+                           lexeme_en_cours.nature = PARF;
+                           etat = E_FIN;
+                           break;
+                        case '=':
+                           lexeme_en_cours.nature = AFF;
+                           etat = E_OP;
+                           break;
+                        case ';':
+                           lexeme_en_cours.nature = SEPAFF;
+                           etat = E_FIN;
+                           break;
+		       		      default:
+                           printf("\nLe caractere courant a l'erreur est : %d\n", caractere_courant());
+                           printf("Erreur_Lexicale") ;
+                           exit(0) ;
 				 	} ;
 		   			avancer_car() ;
 					break ;
-
+            
+            case LETTRE:
+               lexeme_en_cours.nature = IDF;
+               lexeme_en_cours.ligne = numero_ligne();
+             	lexeme_en_cours.colonne = numero_colonne();
+		     		ajouter_caractere (lexeme_en_cours.chaine, caractere_courant()) ;
+         		etat = E_IDF;
+	   			avancer_car() ;
+               break;
+            case OPERATEUR:
+		      	lexeme_en_cours.ligne = numero_ligne();
+         		lexeme_en_cours.colonne = numero_colonne();
+	       		ajouter_caractere (lexeme_en_cours.chaine, caractere_courant()) ;
+               switch (caractere_courant()){
+                  case '>':
+                     lexeme_en_cours.nature = SUP;
+                     etat = E_OP;
+                     break;
+                  case '<':
+                     lexeme_en_cours.nature = INF;
+                     etat = E_OP;
+                     break;
+                  case '!':
+                     lexeme_en_cours.nature = DIFF;
+                     etat = E_OP;
+                     break;
+                  default:
+                     printf("\nLe caractere courant a l'erreur est : %d\n", caractere_courant());
+                     printf("Erreur_Lexicale") ;
+                     exit(0) ;
+               }
+               avancer_car();
+               break;
 				default:
+                 printf("\nLe caractere courant a l'erreur est : %d\n", caractere_courant());
 		           printf("Erreur_Lexicale\n") ;
 		           exit(0) ;
 		} ;
@@ -198,6 +242,93 @@
              default:
                etat = E_FIN;
          }
+      
+      case E_IDF:  // reconnaissance d'un entier
+			switch(nature_caractere(caractere_courant())) {
+			   case CHIFFRE:
+            case LETTRE:
+		  			ajouter_caractere (lexeme_en_cours.chaine, caractere_courant()) ;
+               etat = E_IDF;
+            	avancer_car ();
+					break ;
+			   default:
+                     if (!strcmp(lexeme_en_cours.chaine, "ecrire"))
+                     {
+                        lexeme_en_cours.nature = ECRIRE;
+                     }
+                     if (!strcmp(lexeme_en_cours.chaine, "lire"))
+                     {
+                        lexeme_en_cours.nature = LIRE;
+                     }
+                     if (!strcmp(lexeme_en_cours.chaine, "if"))
+                     {
+                        lexeme_en_cours.nature = IF;
+                     }
+                     if (!strcmp(lexeme_en_cours.chaine, "fi"))
+                     {
+                        lexeme_en_cours.nature = FI;
+                     }
+                     if (!strcmp(lexeme_en_cours.chaine, "then"))
+                     {
+                        lexeme_en_cours.nature = THEN;
+                     }
+                     if (!strcmp(lexeme_en_cours.chaine, "else"))
+                     {
+                        lexeme_en_cours.nature = ELSE;
+                     }
+                     if (!strcmp(lexeme_en_cours.chaine, "while"))
+                     {
+                        lexeme_en_cours.nature = WHILE;
+                     }
+                     if (!strcmp(lexeme_en_cours.chaine, "do"))
+                     {
+                        lexeme_en_cours.nature = DO;
+                     }
+                     if (!strcmp(lexeme_en_cours.chaine, "done"))
+                     {
+                        lexeme_en_cours.nature = DONE;
+                     }
+                     etat = E_FIN;
+          	} ;
+            break;
+      case E_OP:
+         if (caractere_courant() == '=')
+         {
+            ajouter_caractere (lexeme_en_cours.chaine, caractere_courant()) ;
+            switch (lexeme_en_cours.nature)
+            {
+            case INF:
+               lexeme_en_cours.nature = INFEG;
+               etat = E_FIN;
+               break;
+            case SUP:
+               lexeme_en_cours.nature = SUPEG;
+               etat = E_FIN;
+               break;
+            case DIFF:
+               etat = E_FIN;
+               break;
+            case AFF:
+               lexeme_en_cours.nature = EG;
+               etat = E_FIN;
+               break;
+            default:
+               break;
+            }
+            avancer_car();
+         }
+         else
+         {
+            if (lexeme_en_cours.nature == DIFF)
+            {
+               printf("\nLe caractere courant a l'erreur est : %d\n", caractere_courant());
+		         printf("Erreur_Lexicale\n") ;
+	            exit(0) ;
+            }
+            else etat = E_FIN;
+            
+         }
+         
 	   case E_FIN:  // etat final
 		break ;
 	    
@@ -224,13 +355,15 @@
 	   if (fin_de_sequence_car(c)) return C_FIN_SEQUENCE;
 	   if (est_chiffre(c)) return CHIFFRE;
 	   if (est_symbole(c)) return SYMBOLE;
+      if (est_lettre(c)) return LETTRE;
+      if (est_operateur(c)) return OPERATEUR;
 	   return ERREUR_CAR ;
    }
    /* --------------------------------------------------------------------- */
 
    // vaut vrai ssi c designe un caractere separateur
    int est_separateur(char c) { 
-      return c == ' ' || c == '\t' || c == '\n' ;
+      return c == ' ' || c == '\t' || c == '\n' || c == '\r' ;
    }
 
    /* --------------------------------------------------------------------- */
@@ -238,6 +371,13 @@
    // vaut vrai ssi c designe un caractere chiffre
    int est_chiffre(char c) {
       return c >= '0' && c <= '9' ;
+   }
+
+   /* --------------------------------------------------------------------- */
+
+   // vaut vrai ssi c designe un caractere chiffre
+   int est_lettre(char c) {
+      return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ;
    }
 
    /* --------------------------------------------------------------------- */
@@ -252,11 +392,25 @@
       case '.':
       case '(':
       case ')':
+      case '=':
+      case ';':
             return 1;
 
         default:
             return 0;
       } 
+   }
+   
+   int est_operateur(char c){
+      switch (c)
+      {
+      case '<':
+      case '>':
+      case '!':   
+         return 1;
+      default:
+         return 0;
+      }
    }
 
    /* --------------------------------------------------------------------- */
@@ -271,7 +425,21 @@
       case MUL: return "MUL" ;
       case DIV: return "DIV" ;
       case PARO: return "PARO";
-      case PARF: return "PARF"; 
+      case PARF: return "PARF";
+      case AFF: return "AFF";
+      case SEPAFF: return "SEPAFF";
+      case IDF: return "IDF";
+      case LIRE: return "LIRE";
+      case ECRIRE: return "ECRIRE";
+      case IF : return "IF";
+      case THEN : return "THEN";
+      case ELSE : return "ELSE";
+      case SUP : return "SUP";
+      case SUPEG : return "SUPEG";
+      case INF : return "INF";
+      case INFEG : return "INFEG";
+      case EG : return "EG";
+      case DIFF : return "DIFF";
       case FIN_SEQUENCE: return "FIN_SEQUENCE" ;     
       default: return "ERREUR" ;            
 	} ;

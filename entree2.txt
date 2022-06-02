@@ -1,1 +1,8 @@
-12 * (24 - 10)
+lire(x);
+while x != 10 
+do
+ecrire(x);
+x = x + 1
+done;
+y = x;
+ecrire(y)
