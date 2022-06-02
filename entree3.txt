@@ -1,3 +1,11 @@
-lire(x);
-y = x + 3 ;
-ecrire(y*2)
+x = 2;
+if x < 5 then
+    if x >= 2 then 
+        y = 1;
+        ecrire(32)
+    else 
+        y = 2
+    fi 
+else 
+    y = 3
+fi

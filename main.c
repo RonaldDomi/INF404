@@ -44,7 +44,7 @@ int main (int argc, char *argv[]) {
 
     } 
     else{
-        afficher_ast(A);
+        // afficher_ast(A);
         printf("\nBonne syntax !! \n");
         interpreter(A, t);
         afficher_table(t);
