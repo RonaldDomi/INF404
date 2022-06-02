@@ -10,7 +10,7 @@ After the syntax analysis an "abstract syntax tree" is created and then
 evaluated.
 
 This is the evaluation of the entree4.txt
-<!-- ![Example of execution](/test_example.png) -->
+![Example of execution](/test_example.png)
 
 The test cases are made in order, starting with basic 
 affirmations (entree1.txt). Next level is write/read functions.
